@@ -13,9 +13,10 @@ package linkedhashmap
 
 import (
 	"fmt"
-	"github.com/emirpasic/gods/lists/doublylinkedlist"
-	"github.com/emirpasic/gods/maps"
 	"strings"
+
+	"github.com/monitor1379/ggods/lists/doublylinkedlist"
+	"github.com/monitor1379/ggods/maps"
 )
 
 func assertMapImplementation() {

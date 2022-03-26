@@ -15,9 +15,10 @@ package linkedhashset
 
 import (
 	"fmt"
-	"github.com/emirpasic/gods/lists/doublylinkedlist"
-	"github.com/emirpasic/gods/sets"
 	"strings"
+
+	"github.com/monitor1379/ggods/lists/doublylinkedlist"
+	"github.com/monitor1379/ggods/sets"
 )
 
 func assertSetImplementation() {

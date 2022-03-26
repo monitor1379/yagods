@@ -4,7 +4,7 @@
 
 package singlylinkedlist
 
-import "github.com/emirpasic/gods/containers"
+import "github.com/monitor1379/ggods/containers"
 
 func assertEnumerableImplementation() {
 	var _ containers.EnumerableWithIndex = (*List)(nil)

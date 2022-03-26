@@ -17,8 +17,9 @@ package hashbidimap
 
 import (
 	"fmt"
-	"github.com/emirpasic/gods/maps"
-	"github.com/emirpasic/gods/maps/hashmap"
+
+	"github.com/monitor1379/ggods/maps"
+	"github.com/monitor1379/ggods/maps/hashmap"
 )
 
 func assertMapImplementation() {

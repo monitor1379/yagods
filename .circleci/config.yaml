@@ -1,0 +1,16 @@
+version: 2.1
+
+jobs:
+  go-test:
+    docker:
+      - image: cimg/go:1.18
+    steps:
+      - checkout
+      - run:
+          name: "Print Golang version"
+          command: "go version"
+
+workflows:
+  go-test-workflow:
+    jobs:
+      - go-test

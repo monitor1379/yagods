@@ -11,8 +11,9 @@ package hashset
 
 import (
 	"fmt"
-	"github.com/emirpasic/gods/sets"
 	"strings"
+
+	"github.com/monitor1379/ggods/sets"
 )
 
 func assertSetImplementation() {
