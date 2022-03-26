@@ -7,8 +7,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Print Golang version"
-          command: "go version"
+          name: "go test"
+          command: "go test -v ./..."
 
 workflows:
   go-test-workflow:
