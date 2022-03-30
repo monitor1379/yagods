@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/monitor1379/yagods?status.svg)](https://godoc.org/github.com/monitor1379/yagods) [![CircleCI](https://circleci.com/gh/monitor1379/ggods.svg?style=shield)](https://circleci.com/gh/monitor1379/ggods) [![Go Report Card](https://goreportcard.com/badge/github.com/monitor1379/yagods)](https://goreportcard.com/report/github.com/monitor1379/yagods) [![PyPI](https://img.shields.io/pypi/l/Django.svg?maxAge=2592000)](https://github.com/monitor1379/yagods/blob/master/LICENSE)
+[![GoDoc](https://godoc.org/github.com/monitor1379/yagods?status.svg)](https://godoc.org/github.com/monitor1379/yagods) [![CircleCI](https://circleci.com/gh/monitor1379/yagods.svg?style=shield)](https://circleci.com/gh/monitor1379/yagods) [![Go Report Card](https://goreportcard.com/badge/github.com/monitor1379/yagods)](https://goreportcard.com/report/github.com/monitor1379/yagods) [![PyPI](https://img.shields.io/pypi/l/Django.svg?maxAge=2592000)](https://github.com/monitor1379/yagods/blob/master/LICENSE)
 
 # YAGoDS (Yet Another Go Data Structures)
 
