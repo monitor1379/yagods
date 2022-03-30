@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -9,13 +9,14 @@
 // Reference: https://en.wikipedia.org/wiki/Tree_%28data_structure%29
 package trees
 
-import "github.com/monitor1379/ggods/containers"
+import "github.com/monitor1379/yagods/containers"
 
 // Tree interface that all trees implement
-type Tree interface {
-	containers.Container
+type Tree[K comparable, V comparable] interface {
+	containers.Container[V]
 	// Empty() bool
 	// Size() int
 	// Clear()
-	// Values() []interface{}
+	// Values() []V
+	// InterfaceValues() []interface{}
 }

@@ -1,12 +1,14 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package utils
+package utils_test
 
 import (
 	"testing"
 	"time"
+
+	"github.com/monitor1379/yagods/utils"
 )
 
 func TestIntComparator(t *testing.T) {
@@ -23,7 +25,7 @@ func TestIntComparator(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		actual := IntComparator(test[0], test[1])
+		actual := utils.NumberComparator(test[0].(int), test[1].(int))
 		expected := test[2]
 		if actual != expected {
 			t.Errorf("Got %v expected %v", actual, expected)
@@ -46,7 +48,7 @@ func TestStringComparator(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		actual := StringComparator(test[0], test[1])
+		actual := utils.StringComparator(test[0].(string), test[1].(string))
 		expected := test[2]
 		if actual != expected {
 			t.Errorf("Got %v expected %v", actual, expected)
@@ -66,7 +68,7 @@ func TestTimeComparator(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		actual := TimeComparator(test[0], test[1])
+		actual := utils.TimeComparator(test[0].(time.Time), test[1].(time.Time))
 		expected := test[2]
 		if actual != expected {
 			t.Errorf("Got %v expected %v", actual, expected)

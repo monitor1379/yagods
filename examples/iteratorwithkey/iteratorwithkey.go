@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7,12 +7,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/monitor1379/ggods/maps/treemap"
+	"github.com/monitor1379/yagods/maps/treemap"
 )
 
 // IteratorWithKeyExample to demonstrate basic usage of IteratorWithKey
 func main() {
-	m := treemap.NewWithIntComparator()
+	m := treemap.NewWithIntComparator[string]()
 	m.Put(1, "a")
 	m.Put(2, "b")
 	m.Put(3, "a")

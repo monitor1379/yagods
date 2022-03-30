@@ -1,22 +1,20 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package linkedliststack
 
-import "github.com/monitor1379/ggods/containers"
+import "github.com/monitor1379/yagods/containers"
 
-func assertSerializationImplementation() {
-	var _ containers.JSONSerializer = (*Stack)(nil)
-	var _ containers.JSONDeserializer = (*Stack)(nil)
-}
+var _ containers.JSONSerializer = (*Stack[int])(nil)
+var _ containers.JSONDeserializer = (*Stack[string])(nil)
 
 // ToJSON outputs the JSON representation of the stack.
-func (stack *Stack) ToJSON() ([]byte, error) {
+func (stack *Stack[V]) ToJSON() ([]byte, error) {
 	return stack.list.ToJSON()
 }
 
 // FromJSON populates the stack from the input JSON representation.
-func (stack *Stack) FromJSON(data []byte) error {
+func (stack *Stack[V]) FromJSON(data []byte) error {
 	return stack.list.FromJSON(data)
 }

@@ -1,16 +1,18 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package hashbidimap
+package hashbidimap_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/monitor1379/yagods/maps/hashbidimap"
 )
 
 func TestMapPut(t *testing.T) {
-	m := New()
+	m := hashbidimap.New[int, string]()
 	m.Put(5, "e")
 	m.Put(6, "f")
 	m.Put(7, "g")
@@ -23,10 +25,10 @@ func TestMapPut(t *testing.T) {
 	if actualValue := m.Size(); actualValue != 7 {
 		t.Errorf("Got %v expected %v", actualValue, 7)
 	}
-	if actualValue, expectedValue := m.Keys(), []interface{}{1, 2, 3, 4, 5, 6, 7}; !sameElements(actualValue, expectedValue) {
+	if actualValue, expectedValue := m.Keys(), []int{1, 2, 3, 4, 5, 6, 7}; !sameElements(actualValue, expectedValue) {
 		t.Errorf("Got %v expected %v", actualValue, expectedValue)
 	}
-	if actualValue, expectedValue := m.Values(), []interface{}{"a", "b", "c", "d", "e", "f", "g"}; !sameElements(actualValue, expectedValue) {
+	if actualValue, expectedValue := m.Values(), []string{"a", "b", "c", "d", "e", "f", "g"}; !sameElements(actualValue, expectedValue) {
 		t.Errorf("Got %v expected %v", actualValue, expectedValue)
 	}
 
@@ -39,12 +41,12 @@ func TestMapPut(t *testing.T) {
 		{5, "e", true},
 		{6, "f", true},
 		{7, "g", true},
-		{8, nil, false},
+		{8, "", false},
 	}
 
 	for _, test := range tests1 {
 		// retrievals
-		actualValue, actualFound := m.Get(test[0])
+		actualValue, actualFound := m.Get(test[0].(int))
 		if actualValue != test[1] || actualFound != test[2] {
 			t.Errorf("Got %v expected %v", actualValue, test[1])
 		}
@@ -52,7 +54,7 @@ func TestMapPut(t *testing.T) {
 }
 
 func TestMapRemove(t *testing.T) {
-	m := New()
+	m := hashbidimap.New[int, string]()
 	m.Put(5, "e")
 	m.Put(6, "f")
 	m.Put(7, "g")
@@ -68,11 +70,11 @@ func TestMapRemove(t *testing.T) {
 	m.Remove(8)
 	m.Remove(5)
 
-	if actualValue, expectedValue := m.Keys(), []interface{}{1, 2, 3, 4}; !sameElements(actualValue, expectedValue) {
+	if actualValue, expectedValue := m.Keys(), []int{1, 2, 3, 4}; !sameElements(actualValue, expectedValue) {
 		t.Errorf("Got %v expected %v", actualValue, expectedValue)
 	}
 
-	if actualValue, expectedValue := m.Values(), []interface{}{"a", "b", "c", "d"}; !sameElements(actualValue, expectedValue) {
+	if actualValue, expectedValue := m.Values(), []string{"a", "b", "c", "d"}; !sameElements(actualValue, expectedValue) {
 		t.Errorf("Got %v expected %v", actualValue, expectedValue)
 	}
 	if actualValue := m.Size(); actualValue != 4 {
@@ -84,14 +86,14 @@ func TestMapRemove(t *testing.T) {
 		{2, "b", true},
 		{3, "c", true},
 		{4, "d", true},
-		{5, nil, false},
-		{6, nil, false},
-		{7, nil, false},
-		{8, nil, false},
+		{5, "", false},
+		{6, "", false},
+		{7, "", false},
+		{8, "", false},
 	}
 
 	for _, test := range tests2 {
-		actualValue, actualFound := m.Get(test[0])
+		actualValue, actualFound := m.Get(test[0].(int))
 		if actualValue != test[1] || actualFound != test[2] {
 			t.Errorf("Got %v expected %v", actualValue, test[1])
 		}
@@ -104,7 +106,7 @@ func TestMapRemove(t *testing.T) {
 	m.Remove(2)
 	m.Remove(2)
 
-	if actualValue, expectedValue := fmt.Sprintf("%s", m.Keys()), "[]"; actualValue != expectedValue {
+	if actualValue, expectedValue := fmt.Sprintf("%v", m.Keys()), "[]"; actualValue != expectedValue {
 		t.Errorf("Got %v expected %v", actualValue, expectedValue)
 	}
 	if actualValue, expectedValue := fmt.Sprintf("%s", m.Values()), "[]"; actualValue != expectedValue {
@@ -119,7 +121,7 @@ func TestMapRemove(t *testing.T) {
 }
 
 func TestMapGetKey(t *testing.T) {
-	m := New()
+	m := hashbidimap.New[int, string]()
 	m.Put(5, "e")
 	m.Put(6, "f")
 	m.Put(7, "g")
@@ -138,12 +140,12 @@ func TestMapGetKey(t *testing.T) {
 		{5, "e", true},
 		{6, "f", true},
 		{7, "g", true},
-		{nil, "x", false},
+		{0, "x", false},
 	}
 
 	for _, test := range tests1 {
 		// retrievals
-		actualValue, actualFound := m.GetKey(test[1])
+		actualValue, actualFound := m.GetKey(test[1].(string))
 		if actualValue != test[0] || actualFound != test[2] {
 			t.Errorf("Got %v expected %v", actualValue, test[0])
 		}
@@ -151,17 +153,17 @@ func TestMapGetKey(t *testing.T) {
 }
 
 func TestMapSerialization(t *testing.T) {
-	m := New()
+	m := hashbidimap.New[string, float64]()
 	m.Put("a", 1.0)
 	m.Put("b", 2.0)
 	m.Put("c", 3.0)
 
 	var err error
 	assert := func() {
-		if actualValue, expectedValue := m.Keys(), []interface{}{"a", "b", "c"}; !sameElements(actualValue, expectedValue) {
+		if actualValue, expectedValue := m.Keys(), []string{"a", "b", "c"}; !sameElements(actualValue, expectedValue) {
 			t.Errorf("Got %v expected %v", actualValue, expectedValue)
 		}
-		if actualValue, expectedValue := m.Values(), []interface{}{1.0, 2.0, 3.0}; !sameElements(actualValue, expectedValue) {
+		if actualValue, expectedValue := m.Values(), []float64{1.0, 2.0, 3.0}; !sameElements(actualValue, expectedValue) {
 			t.Errorf("Got %v expected %v", actualValue, expectedValue)
 		}
 		if actualValue, expectedValue := m.Size(), 3; actualValue != expectedValue {
@@ -181,7 +183,7 @@ func TestMapSerialization(t *testing.T) {
 	assert()
 }
 
-func sameElements(a []interface{}, b []interface{}) bool {
+func sameElements[T comparable](a []T, b []T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -200,7 +202,7 @@ func sameElements(a []interface{}, b []interface{}) bool {
 	return true
 }
 
-func benchmarkGet(b *testing.B, m *Map, size int) {
+func benchmarkGet(b *testing.B, m *hashbidimap.Map[int, int], size int) {
 	for i := 0; i < b.N; i++ {
 		for n := 0; n < size; n++ {
 			m.Get(n)
@@ -208,7 +210,7 @@ func benchmarkGet(b *testing.B, m *Map, size int) {
 	}
 }
 
-func benchmarkPut(b *testing.B, m *Map, size int) {
+func benchmarkPut(b *testing.B, m *hashbidimap.Map[int, int], size int) {
 	for i := 0; i < b.N; i++ {
 		for n := 0; n < size; n++ {
 			m.Put(n, n)
@@ -216,7 +218,7 @@ func benchmarkPut(b *testing.B, m *Map, size int) {
 	}
 }
 
-func benchmarkRemove(b *testing.B, m *Map, size int) {
+func benchmarkRemove(b *testing.B, m *hashbidimap.Map[int, int], size int) {
 	for i := 0; i < b.N; i++ {
 		for n := 0; n < size; n++ {
 			m.Remove(n)
@@ -227,7 +229,7 @@ func benchmarkRemove(b *testing.B, m *Map, size int) {
 func BenchmarkHashBidiMapGet100(b *testing.B) {
 	b.StopTimer()
 	size := 100
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -238,7 +240,7 @@ func BenchmarkHashBidiMapGet100(b *testing.B) {
 func BenchmarkHashBidiMapGet1000(b *testing.B) {
 	b.StopTimer()
 	size := 1000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -249,7 +251,7 @@ func BenchmarkHashBidiMapGet1000(b *testing.B) {
 func BenchmarkHashBidiMapGet10000(b *testing.B) {
 	b.StopTimer()
 	size := 10000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -260,7 +262,7 @@ func BenchmarkHashBidiMapGet10000(b *testing.B) {
 func BenchmarkHashBidiMapGet100000(b *testing.B) {
 	b.StopTimer()
 	size := 100000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -271,7 +273,7 @@ func BenchmarkHashBidiMapGet100000(b *testing.B) {
 func BenchmarkHashBidiMapPut100(b *testing.B) {
 	b.StopTimer()
 	size := 100
-	m := New()
+	m := hashbidimap.New[int, int]()
 	b.StartTimer()
 	benchmarkPut(b, m, size)
 }
@@ -279,7 +281,7 @@ func BenchmarkHashBidiMapPut100(b *testing.B) {
 func BenchmarkHashBidiMapPut1000(b *testing.B) {
 	b.StopTimer()
 	size := 1000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -290,7 +292,7 @@ func BenchmarkHashBidiMapPut1000(b *testing.B) {
 func BenchmarkHashBidiMapPut10000(b *testing.B) {
 	b.StopTimer()
 	size := 10000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -301,7 +303,7 @@ func BenchmarkHashBidiMapPut10000(b *testing.B) {
 func BenchmarkHashBidiMapPut100000(b *testing.B) {
 	b.StopTimer()
 	size := 100000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -312,7 +314,7 @@ func BenchmarkHashBidiMapPut100000(b *testing.B) {
 func BenchmarkHashBidiMapRemove100(b *testing.B) {
 	b.StopTimer()
 	size := 100
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -323,7 +325,7 @@ func BenchmarkHashBidiMapRemove100(b *testing.B) {
 func BenchmarkHashBidiMapRemove1000(b *testing.B) {
 	b.StopTimer()
 	size := 1000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -334,7 +336,7 @@ func BenchmarkHashBidiMapRemove1000(b *testing.B) {
 func BenchmarkHashBidiMapRemove10000(b *testing.B) {
 	b.StopTimer()
 	size := 10000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}
@@ -345,7 +347,7 @@ func BenchmarkHashBidiMapRemove10000(b *testing.B) {
 func BenchmarkHashBidiMapRemove100000(b *testing.B) {
 	b.StopTimer()
 	size := 100000
-	m := New()
+	m := hashbidimap.New[int, int]()
 	for n := 0; n < size; n++ {
 		m.Put(n, n)
 	}

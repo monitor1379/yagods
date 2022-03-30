@@ -1,12 +1,12 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package main
 
 import (
-	"github.com/monitor1379/ggods/trees/binaryheap"
-	"github.com/monitor1379/ggods/utils"
+	"github.com/monitor1379/yagods/trees/binaryheap"
+	"github.com/monitor1379/yagods/utils"
 )
 
 // BinaryHeapExample to demonstrate basic usage of BinaryHeap
@@ -22,15 +22,15 @@ func main() {
 	_, _ = heap.Pop()                         // 1, true
 	_, _ = heap.Pop()                         // 2, true
 	_, _ = heap.Pop()                         // 3, true
-	_, _ = heap.Pop()                         // nil, false (nothing to pop)
+	_, _ = heap.Pop()                         // 0, false (nothing to pop)
 	heap.Push(1)                              // 1
 	heap.Clear()                              // empty
 	heap.Empty()                              // true
 	heap.Size()                               // 0
 
 	// Max-heap
-	inverseIntComparator := func(a, b interface{}) int {
-		return -utils.IntComparator(a, b)
+	inverseIntComparator := func(a, b int) int {
+		return -utils.NumberComparator(a, b)
 	}
 	heap = binaryheap.NewWith(inverseIntComparator) // empty (min-heap)
 	heap.Push(2)                                    // 2

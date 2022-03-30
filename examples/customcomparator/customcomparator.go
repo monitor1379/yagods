@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7,7 +7,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/monitor1379/ggods/sets/treeset"
+	"github.com/monitor1379/yagods/sets/treeset"
 )
 
 // User model (id and name)
@@ -17,16 +17,11 @@ type User struct {
 }
 
 // Comparator function (sort by IDs)
-func byID(a, b interface{}) int {
-
-	// Type assertion, program will panic if this is not respected
-	c1 := a.(User)
-	c2 := b.(User)
-
+func byID(a, b User) int {
 	switch {
-	case c1.id > c2.id:
+	case a.id > b.id:
 		return 1
-	case c1.id < c2.id:
+	case a.id < b.id:
 		return -1
 	default:
 		return 0

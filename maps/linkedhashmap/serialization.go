@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -8,17 +8,15 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/monitor1379/ggods/containers"
-	"github.com/monitor1379/ggods/utils"
+	"github.com/monitor1379/yagods/containers"
+	"github.com/monitor1379/yagods/utils"
 )
 
-func assertSerializationImplementation() {
-	var _ containers.JSONSerializer = (*Map)(nil)
-	var _ containers.JSONDeserializer = (*Map)(nil)
-}
+var _ containers.JSONSerializer = (*Map[int, string])(nil)
+var _ containers.JSONDeserializer = (*Map[int, string])(nil)
 
 // ToJSON outputs the JSON representation of map.
-func (m *Map) ToJSON() ([]byte, error) {
+func (m *Map[K, V]) ToJSON() ([]byte, error) {
 	var b []byte
 	buf := bytes.NewBuffer(b)
 
@@ -56,39 +54,24 @@ func (m *Map) ToJSON() ([]byte, error) {
 }
 
 // FromJSON populates map from the input JSON representation.
-//func (m *Map) FromJSON(data []byte) error {
-//	elements := make(map[string]interface{})
-//	err := json.Unmarshal(data, &elements)
-//	if err == nil {
-//		m.Clear()
-//		for key, value := range elements {
-//			m.Put(key, value)
-//		}
-//	}
-//	return err
-//}
-
-// FromJSON populates map from the input JSON representation.
-func (m *Map) FromJSON(data []byte) error {
-	elements := make(map[string]interface{})
+func (m *Map[K, V]) FromJSON(data []byte) error {
+	elements := make(map[K]V)
 	err := json.Unmarshal(data, &elements)
 	if err != nil {
 		return err
 	}
 
-	index := make(map[string]int)
-	var keys []interface{}
+	index := make(map[K]int)
+	var keys []K
 	for key := range elements {
 		keys = append(keys, key)
 		esc, _ := json.Marshal(key)
 		index[key] = bytes.Index(data, esc)
 	}
 
-	byIndex := func(a, b interface{}) int {
-		key1 := a.(string)
-		key2 := b.(string)
-		index1 := index[key1]
-		index2 := index[key2]
+	byIndex := func(a, b K) int {
+		index1 := index[a]
+		index2 := index[b]
 		return index1 - index2
 	}
 
@@ -97,7 +80,7 @@ func (m *Map) FromJSON(data []byte) error {
 	m.Clear()
 
 	for _, key := range keys {
-		m.Put(key, elements[key.(string)])
+		m.Put(key, elements[key])
 	}
 
 	return nil

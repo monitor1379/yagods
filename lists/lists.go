@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -10,24 +10,25 @@
 package lists
 
 import (
-	"github.com/monitor1379/ggods/containers"
-	"github.com/monitor1379/ggods/utils"
+	"github.com/monitor1379/yagods/containers"
+	"github.com/monitor1379/yagods/utils"
 )
 
 // List interface that all lists implement
-type List interface {
-	Get(index int) (interface{}, bool)
+type List[V any] interface {
+	Get(index int) (V, bool)
 	Remove(index int)
-	Add(values ...interface{})
-	Contains(values ...interface{}) bool
-	Sort(comparator utils.Comparator)
+	Add(values ...V)
+	Contains(values ...V) bool
+	Sort(comparator utils.Comparator[V])
 	Swap(index1, index2 int)
-	Insert(index int, values ...interface{})
-	Set(index int, value interface{})
+	Insert(index int, values ...V)
+	Set(index int, value V)
 
-	containers.Container
+	containers.Container[V]
 	// Empty() bool
 	// Size() int
 	// Clear()
-	// Values() []interface{}
+	// Values() []V
+	// InterfaceValues() []interface{}
 }

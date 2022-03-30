@@ -1,17 +1,17 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package main
 
 import (
-	"github.com/monitor1379/ggods/maps/treebidimap"
-	"github.com/monitor1379/ggods/utils"
+	"github.com/monitor1379/yagods/maps/treebidimap"
+	"github.com/monitor1379/yagods/utils"
 )
 
 // TreeBidiMapExample to demonstrate basic usage of TreeBidiMap
 func main() {
-	m := treebidimap.NewWith(utils.IntComparator, utils.StringComparator)
+	m := treebidimap.NewWith(utils.NumberComparator[int], utils.StringComparator)
 	m.Put(1, "x")        // 1->x
 	m.Put(3, "b")        // 1->x, 3->b (ordered)
 	m.Put(1, "a")        // 1->a, 3->b (ordered)

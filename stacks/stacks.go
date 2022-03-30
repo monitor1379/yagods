@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -9,17 +9,18 @@
 // Reference: https://en.wikipedia.org/wiki/Stack_%28abstract_data_type%29
 package stacks
 
-import "github.com/monitor1379/ggods/containers"
+import "github.com/monitor1379/yagods/containers"
 
 // Stack interface that all stacks implement
-type Stack interface {
-	Push(value interface{})
-	Pop() (value interface{}, ok bool)
-	Peek() (value interface{}, ok bool)
+type Stack[V any] interface {
+	Push(value V)
+	Pop() (value V, ok bool)
+	Peek() (value V, ok bool)
 
-	containers.Container
+	containers.Container[V]
 	// Empty() bool
 	// Size() int
 	// Clear()
-	// Values() []interface{}
+	// Values() []V
+	// InterfaceValues() []interface{}
 }

@@ -1,23 +1,23 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package main
 
 import (
-	dll "github.com/monitor1379/ggods/lists/doublylinkedlist"
-	"github.com/monitor1379/ggods/utils"
+	dll "github.com/monitor1379/yagods/lists/doublylinkedlist"
+	"github.com/monitor1379/yagods/utils"
 )
 
 // DoublyLinkedListExample to demonstrate basic usage of DoublyLinkedList
 func main() {
-	list := dll.New()
+	list := dll.New[string]()
 	list.Add("a")                         // ["a"]
 	list.Append("b")                      // ["a","b"] (same as Add())
 	list.Prepend("c")                     // ["c","a","b"]
 	list.Sort(utils.StringComparator)     // ["a","b","c"]
 	_, _ = list.Get(0)                    // "a",true
-	_, _ = list.Get(100)                  // nil,false
+	_, _ = list.Get(100)                  // "",false
 	_ = list.Contains("a", "b", "c")      // true
 	_ = list.Contains("a", "b", "c", "d") // false
 	list.Remove(2)                        // ["a","b"]

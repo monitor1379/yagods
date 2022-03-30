@@ -3,13 +3,13 @@ package serialization
 import (
 	"fmt"
 
-	"github.com/monitor1379/ggods/lists/arraylist"
-	"github.com/monitor1379/ggods/maps/hashmap"
+	"github.com/monitor1379/yagods/lists/arraylist"
+	"github.com/monitor1379/yagods/maps/hashmap"
 )
 
 // ListSerializationExample demonstrates how to serialize and deserialize lists to and from JSON
 func ListSerializationExample() {
-	list := arraylist.New()
+	list := arraylist.New[string]()
 	list.Add("a", "b", "c")
 
 	// Serialization (marshalling)
@@ -30,7 +30,7 @@ func ListSerializationExample() {
 
 // MapSerializationExample demonstrates how to serialize and deserialize maps to and from JSON
 func MapSerializationExample() {
-	m := hashmap.New()
+	m := hashmap.New[string, string]()
 	m.Put("a", "1")
 	m.Put("b", "2")
 	m.Put("c", "3")

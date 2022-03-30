@@ -1,16 +1,18 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package arraystack
+package arraystack_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/monitor1379/yagods/stacks/arraystack"
 )
 
 func TestStackPush(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[int]()
 	if actualValue := stack.Empty(); actualValue != true {
 		t.Errorf("Got %v expected %v", actualValue, true)
 	}
@@ -18,7 +20,7 @@ func TestStackPush(t *testing.T) {
 	stack.Push(2)
 	stack.Push(3)
 
-	if actualValue := stack.Values(); actualValue[0].(int) != 3 || actualValue[1].(int) != 2 || actualValue[2].(int) != 1 {
+	if actualValue := stack.Values(); actualValue[0] != 3 || actualValue[1] != 2 || actualValue[2] != 1 {
 		t.Errorf("Got %v expected %v", actualValue, "[3,2,1]")
 	}
 	if actualValue := stack.Empty(); actualValue != false {
@@ -33,8 +35,8 @@ func TestStackPush(t *testing.T) {
 }
 
 func TestStackPeek(t *testing.T) {
-	stack := New()
-	if actualValue, ok := stack.Peek(); actualValue != nil || ok {
+	stack := arraystack.New[int]()
+	if actualValue, ok := stack.Peek(); actualValue != 0 || ok {
 		t.Errorf("Got %v expected %v", actualValue, nil)
 	}
 	stack.Push(1)
@@ -46,7 +48,7 @@ func TestStackPeek(t *testing.T) {
 }
 
 func TestStackPop(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[int]()
 	stack.Push(1)
 	stack.Push(2)
 	stack.Push(3)
@@ -60,7 +62,7 @@ func TestStackPop(t *testing.T) {
 	if actualValue, ok := stack.Pop(); actualValue != 1 || !ok {
 		t.Errorf("Got %v expected %v", actualValue, 1)
 	}
-	if actualValue, ok := stack.Pop(); actualValue != nil || ok {
+	if actualValue, ok := stack.Pop(); actualValue != 0 || ok {
 		t.Errorf("Got %v expected %v", actualValue, nil)
 	}
 	if actualValue := stack.Empty(); actualValue != true {
@@ -72,7 +74,7 @@ func TestStackPop(t *testing.T) {
 }
 
 func TestStackIteratorOnEmpty(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[int]()
 	it := stack.Iterator()
 	for it.Next() {
 		t.Errorf("Shouldn't iterate on empty stack")
@@ -80,7 +82,7 @@ func TestStackIteratorOnEmpty(t *testing.T) {
 }
 
 func TestStackIteratorNext(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[string]()
 	stack.Push("a")
 	stack.Push("b")
 	stack.Push("c")
@@ -117,7 +119,7 @@ func TestStackIteratorNext(t *testing.T) {
 }
 
 func TestStackIteratorPrev(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[string]()
 	stack.Push("a")
 	stack.Push("b")
 	stack.Push("c")
@@ -156,7 +158,7 @@ func TestStackIteratorPrev(t *testing.T) {
 }
 
 func TestStackIteratorBegin(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[string]()
 	it := stack.Iterator()
 	it.Begin()
 	stack.Push("a")
@@ -172,7 +174,7 @@ func TestStackIteratorBegin(t *testing.T) {
 }
 
 func TestStackIteratorEnd(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[string]()
 	it := stack.Iterator()
 
 	if index := it.Index(); index != -1 {
@@ -199,7 +201,7 @@ func TestStackIteratorEnd(t *testing.T) {
 }
 
 func TestStackIteratorFirst(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[string]()
 	it := stack.Iterator()
 	if actualValue, expectedValue := it.First(), false; actualValue != expectedValue {
 		t.Errorf("Got %v expected %v", actualValue, expectedValue)
@@ -216,7 +218,7 @@ func TestStackIteratorFirst(t *testing.T) {
 }
 
 func TestStackIteratorLast(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[string]()
 	it := stack.Iterator()
 	if actualValue, expectedValue := it.Last(), false; actualValue != expectedValue {
 		t.Errorf("Got %v expected %v", actualValue, expectedValue)
@@ -232,15 +234,23 @@ func TestStackIteratorLast(t *testing.T) {
 	}
 }
 
+func toInterfaces[T any](ts []T) []interface{} {
+	is := make([]interface{}, 0)
+	for _, t := range ts {
+		is = append(is, t)
+	}
+	return is
+}
+
 func TestStackSerialization(t *testing.T) {
-	stack := New()
+	stack := arraystack.New[string]()
 	stack.Push("a")
 	stack.Push("b")
 	stack.Push("c")
 
 	var err error
 	assert := func() {
-		if actualValue, expectedValue := fmt.Sprintf("%s%s%s", stack.Values()...), "cba"; actualValue != expectedValue {
+		if actualValue, expectedValue := fmt.Sprintf("%s%s%s", toInterfaces(stack.Values())...), "cba"; actualValue != expectedValue {
 			t.Errorf("Got %v expected %v", actualValue, expectedValue)
 		}
 		if actualValue, expectedValue := stack.Size(), 3; actualValue != expectedValue {
@@ -260,7 +270,7 @@ func TestStackSerialization(t *testing.T) {
 	assert()
 }
 
-func benchmarkPush(b *testing.B, stack *Stack, size int) {
+func benchmarkPush(b *testing.B, stack *arraystack.Stack[int], size int) {
 	for i := 0; i < b.N; i++ {
 		for n := 0; n < size; n++ {
 			stack.Push(n)
@@ -268,7 +278,7 @@ func benchmarkPush(b *testing.B, stack *Stack, size int) {
 	}
 }
 
-func benchmarkPop(b *testing.B, stack *Stack, size int) {
+func benchmarkPop(b *testing.B, stack *arraystack.Stack[int], size int) {
 	for i := 0; i < b.N; i++ {
 		for n := 0; n < size; n++ {
 			stack.Pop()
@@ -279,7 +289,7 @@ func benchmarkPop(b *testing.B, stack *Stack, size int) {
 func BenchmarkArrayStackPop100(b *testing.B) {
 	b.StopTimer()
 	size := 100
-	stack := New()
+	stack := arraystack.New[int]()
 	for n := 0; n < size; n++ {
 		stack.Push(n)
 	}
@@ -290,7 +300,7 @@ func BenchmarkArrayStackPop100(b *testing.B) {
 func BenchmarkArrayStackPop1000(b *testing.B) {
 	b.StopTimer()
 	size := 1000
-	stack := New()
+	stack := arraystack.New[int]()
 	for n := 0; n < size; n++ {
 		stack.Push(n)
 	}
@@ -301,7 +311,7 @@ func BenchmarkArrayStackPop1000(b *testing.B) {
 func BenchmarkArrayStackPop10000(b *testing.B) {
 	b.StopTimer()
 	size := 10000
-	stack := New()
+	stack := arraystack.New[int]()
 	for n := 0; n < size; n++ {
 		stack.Push(n)
 	}
@@ -312,7 +322,7 @@ func BenchmarkArrayStackPop10000(b *testing.B) {
 func BenchmarkArrayStackPop100000(b *testing.B) {
 	b.StopTimer()
 	size := 100000
-	stack := New()
+	stack := arraystack.New[int]()
 	for n := 0; n < size; n++ {
 		stack.Push(n)
 	}
@@ -323,7 +333,7 @@ func BenchmarkArrayStackPop100000(b *testing.B) {
 func BenchmarkArrayStackPush100(b *testing.B) {
 	b.StopTimer()
 	size := 100
-	stack := New()
+	stack := arraystack.New[int]()
 	b.StartTimer()
 	benchmarkPush(b, stack, size)
 }
@@ -331,7 +341,7 @@ func BenchmarkArrayStackPush100(b *testing.B) {
 func BenchmarkArrayStackPush1000(b *testing.B) {
 	b.StopTimer()
 	size := 1000
-	stack := New()
+	stack := arraystack.New[int]()
 	for n := 0; n < size; n++ {
 		stack.Push(n)
 	}
@@ -342,7 +352,7 @@ func BenchmarkArrayStackPush1000(b *testing.B) {
 func BenchmarkArrayStackPush10000(b *testing.B) {
 	b.StopTimer()
 	size := 10000
-	stack := New()
+	stack := arraystack.New[int]()
 	for n := 0; n < size; n++ {
 		stack.Push(n)
 	}
@@ -353,7 +363,7 @@ func BenchmarkArrayStackPush10000(b *testing.B) {
 func BenchmarkArrayStackPush100000(b *testing.B) {
 	b.StopTimer()
 	size := 100000
-	stack := New()
+	stack := arraystack.New[int]()
 	for n := 0; n < size; n++ {
 		stack.Push(n)
 	}

@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -15,25 +15,26 @@
 // Reference: https://en.wikipedia.org/wiki/Associative_array
 package maps
 
-import "github.com/monitor1379/ggods/containers"
+import "github.com/monitor1379/yagods/containers"
 
 // Map interface that all maps implement
-type Map interface {
-	Put(key interface{}, value interface{})
-	Get(key interface{}) (value interface{}, found bool)
-	Remove(key interface{})
-	Keys() []interface{}
+type Map[K comparable, V any] interface {
+	Put(key K, value V)
+	Get(key K) (value V, found bool)
+	Remove(key K)
+	Keys() []K
 
-	containers.Container
+	containers.Container[V]
 	// Empty() bool
 	// Size() int
 	// Clear()
-	// Values() []interface{}
+	// Values() []V
+	// InterfaceValues() []interface{}
 }
 
 // BidiMap interface that all bidirectional maps implement (extends the Map interface)
-type BidiMap interface {
-	GetKey(value interface{}) (key interface{}, found bool)
+type BidiMap[K comparable, V comparable] interface {
+	GetKey(value V) (key K, found bool)
 
-	Map
+	Map[K, V]
 }

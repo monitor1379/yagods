@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -13,19 +13,20 @@
 // Serialization provides serializers (marshalers) and deserializers (unmarshalers).
 package containers
 
-import "github.com/monitor1379/ggods/utils"
+import "github.com/monitor1379/yagods/utils"
 
 // Container is base interface that all data structures implement.
-type Container interface {
+type Container[V any] interface {
 	Empty() bool
 	Size() int
 	Clear()
-	Values() []interface{}
+	Values() []V
+	InterfaceValues() []interface{}
 }
 
 // GetSortedValues returns sorted container's elements with respect to the passed comparator.
 // Does not effect the ordering of elements within the container.
-func GetSortedValues(container Container, comparator utils.Comparator) []interface{} {
+func GetSortedValues[V any](container Container[V], comparator utils.Comparator[V]) []V {
 	values := container.Values()
 	if len(values) < 2 {
 		return values

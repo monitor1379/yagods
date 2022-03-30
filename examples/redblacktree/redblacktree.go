@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Emir Pasic. All rights reserved.
+// Copyright (c) 2022, Zhenpeng Deng & Emir Pasic. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7,12 +7,12 @@ package main
 import (
 	"fmt"
 
-	rbt "github.com/monitor1379/ggods/trees/redblacktree"
+	rbt "github.com/monitor1379/yagods/trees/redblacktree"
 )
 
 // RedBlackTreeExample to demonstrate basic usage of RedBlackTree
 func main() {
-	tree := rbt.NewWithIntComparator() // empty(keys are of type int)
+	tree := rbt.NewWithIntComparator[string]() // empty(keys are of type int)
 
 	tree.Put(1, "x") // 1->x
 	tree.Put(2, "b") // 1->x, 2->b (in order)
@@ -32,8 +32,8 @@ func main() {
 	//  └── 2
 	//       └── 1
 
-	_ = tree.Values() // []interface {}{"a", "b", "c", "d", "e", "f"} (in order)
-	_ = tree.Keys()   // []interface {}{1, 2, 3, 4, 5, 6} (in order)
+	_ = tree.Values() // []string {}{"a", "b", "c", "d", "e", "f"} (in order)
+	_ = tree.Keys()   // []int {}{1, 2, 3, 4, 5, 6} (in order)
 
 	tree.Remove(2) // 1->a, 3->c, 4->d, 5->e, 6->f (in order)
 	fmt.Println(tree)
